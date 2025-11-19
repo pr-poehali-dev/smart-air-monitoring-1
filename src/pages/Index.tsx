@@ -3,6 +3,7 @@ import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Icon from '@/components/ui/icon';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 
 interface AirQualityData {
   pm25: number;
@@ -24,6 +25,18 @@ interface Sensor {
   lng: number;
   data: AirQualityData;
   status: 'good' | 'moderate' | 'poor' | 'hazardous';
+}
+
+interface EcoProblem {
+  id: string;
+  type: 'trash' | 'road' | 'snow' | 'park' | 'water' | 'noise';
+  title: string;
+  location: string;
+  description: string;
+  severity: 'low' | 'medium' | 'high' | 'critical';
+  status: 'new' | 'in_progress' | 'resolved';
+  reportedDate: string;
+  reportedBy: string;
 }
 
 const mockSensors: Sensor[] = [
@@ -124,6 +137,97 @@ const mockSensors: Sensor[] = [
   }
 ];
 
+const mockProblems: EcoProblem[] = [
+  {
+    id: '1',
+    type: 'trash',
+    title: 'Переполнены мусорные контейнеры',
+    location: 'ул. Центральная, д. 12',
+    description: 'Мусорные контейнеры переполнены более 3 дней. Мусор разбросан вокруг площадки.',
+    severity: 'high',
+    status: 'new',
+    reportedDate: '2024-11-18',
+    reportedBy: 'Жители дома'
+  },
+  {
+    id: '2',
+    type: 'road',
+    title: 'Разбитая дорога с выбоинами',
+    location: 'Киевское шоссе, участок 500м',
+    description: 'Глубокие выбоины на дорожном полотне создают аварийную ситуацию. Повреждена дренажная система.',
+    severity: 'critical',
+    status: 'in_progress',
+    reportedDate: '2024-11-15',
+    reportedBy: 'Дорожная служба'
+  },
+  {
+    id: '3',
+    type: 'snow',
+    title: 'Не расчищен тротуар от снега',
+    location: 'ул. Школьная, от дома 5 до дома 15',
+    description: 'Тротуар не очищен от снега и наледи. Затруднен проход пешеходов.',
+    severity: 'medium',
+    status: 'new',
+    reportedDate: '2024-11-17',
+    reportedBy: 'Жители'
+  },
+  {
+    id: '4',
+    type: 'park',
+    title: 'Загрязнение парка культуры',
+    location: 'Парк культуры, зона отдыха',
+    description: 'Обнаружен несанкционированный сброс строительного мусора. Повреждены газоны.',
+    severity: 'high',
+    status: 'new',
+    reportedDate: '2024-11-18',
+    reportedBy: 'Служба благоустройства'
+  },
+  {
+    id: '5',
+    type: 'water',
+    title: 'Утечка воды из водопровода',
+    location: 'ул. Центральная, д. 8',
+    description: 'Обнаружена утечка воды. Образовалась наледь на тротуаре.',
+    severity: 'critical',
+    status: 'in_progress',
+    reportedDate: '2024-11-16',
+    reportedBy: 'ЖКХ'
+  },
+  {
+    id: '6',
+    type: 'road',
+    title: 'Разрушенный бордюр',
+    location: 'ул. Молодежная, д. 20',
+    description: 'Разрушен бордюрный камень на протяжении 15 метров.',
+    severity: 'medium',
+    status: 'new',
+    reportedDate: '2024-11-18',
+    reportedBy: 'Жители'
+  },
+  {
+    id: '7',
+    type: 'trash',
+    title: 'Стихийная свалка',
+    location: 'Лесопарковая зона, северная часть',
+    description: 'Образовалась несанкционированная свалка бытовых отходов объемом около 5 куб.м.',
+    severity: 'critical',
+    status: 'new',
+    reportedDate: '2024-11-17',
+    reportedBy: 'Экологический патруль'
+  },
+  {
+    id: '8',
+    type: 'noise',
+    title: 'Превышение шумовых норм',
+    location: 'Киевское шоссе, жилая зона',
+    description: 'Постоянное превышение допустимого уровня шума от автотранспорта в ночное время.',
+    severity: 'medium',
+    status: 'in_progress',
+    reportedDate: '2024-11-14',
+    reportedBy: 'Жители'
+  }
+];
+
 const getStatusColor = (status: string) => {
   switch (status) {
     case 'good':
@@ -154,6 +258,68 @@ const getStatusLabel = (status: string) => {
   }
 };
 
+const getSeverityColor = (severity: string) => {
+  switch (severity) {
+    case 'low':
+      return 'bg-blue-500/20 text-blue-400 border-blue-500/50';
+    case 'medium':
+      return 'bg-yellow-500/20 text-yellow-400 border-yellow-500/50';
+    case 'high':
+      return 'bg-orange-500/20 text-orange-400 border-orange-500/50';
+    case 'critical':
+      return 'bg-red-500/20 text-red-400 border-red-500/50';
+    default:
+      return 'bg-gray-500/20 text-gray-400 border-gray-500/50';
+  }
+};
+
+const getSeverityLabel = (severity: string) => {
+  switch (severity) {
+    case 'low':
+      return 'Низкий';
+    case 'medium':
+      return 'Средний';
+    case 'high':
+      return 'Высокий';
+    case 'critical':
+      return 'Критический';
+    default:
+      return 'Н/Д';
+  }
+};
+
+const getProblemStatusLabel = (status: string) => {
+  switch (status) {
+    case 'new':
+      return 'Новая';
+    case 'in_progress':
+      return 'В работе';
+    case 'resolved':
+      return 'Решена';
+    default:
+      return 'Н/Д';
+  }
+};
+
+const getProblemTypeIcon = (type: string) => {
+  switch (type) {
+    case 'trash':
+      return 'Trash2';
+    case 'road':
+      return 'Construction';
+    case 'snow':
+      return 'Snowflake';
+    case 'park':
+      return 'Trees';
+    case 'water':
+      return 'Droplet';
+    case 'noise':
+      return 'Volume2';
+    default:
+      return 'AlertTriangle';
+  }
+};
+
 const MetricCard = ({ icon, label, value, unit, status }: { icon: string; label: string; value: number; unit: string; status: string }) => (
   <Card className="p-4 bg-card/50 backdrop-blur-sm border-border/50 hover:border-primary/50 transition-all hover-scale">
     <div className="flex items-center gap-3">
@@ -173,6 +339,7 @@ const MetricCard = ({ icon, label, value, unit, status }: { icon: string; label:
 export default function Index() {
   const [selectedSensor, setSelectedSensor] = useState<Sensor>(mockSensors[0]);
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [problemFilter, setProblemFilter] = useState<string>('all');
 
   const calculateAQI = (pm25: number) => {
     if (pm25 <= 12) return { value: Math.round((pm25 / 12) * 50), status: 'good' };
@@ -182,6 +349,17 @@ export default function Index() {
   };
 
   const aqi = calculateAQI(selectedSensor.data.pm25);
+
+  const filteredProblems = problemFilter === 'all' 
+    ? mockProblems 
+    : mockProblems.filter(p => p.type === problemFilter);
+
+  const problemStats = {
+    total: mockProblems.length,
+    new: mockProblems.filter(p => p.status === 'new').length,
+    inProgress: mockProblems.filter(p => p.status === 'in_progress').length,
+    critical: mockProblems.filter(p => p.severity === 'critical').length
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -194,12 +372,16 @@ export default function Index() {
               </div>
               <div>
                 <h1 className="text-2xl font-bold">Экомониторинг Селятино</h1>
-                <p className="text-sm text-muted-foreground">Система контроля качества воздуха</p>
+                <p className="text-sm text-muted-foreground">Комплексная система экологического контроля</p>
               </div>
             </div>
             <div className="flex items-center gap-4">
               <Badge className={`${getStatusColor(aqi.status)} px-4 py-2`}>
                 AQI: {aqi.value}
+              </Badge>
+              <Badge variant="outline" className="px-4 py-2">
+                <Icon name="AlertCircle" size={16} className="mr-1" />
+                {problemStats.new} новых проблем
               </Badge>
             </div>
           </div>
@@ -208,18 +390,22 @@ export default function Index() {
 
       <main className="container mx-auto px-4 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full max-w-2xl mx-auto grid-cols-3 bg-card/50">
+          <TabsList className="grid w-full max-w-3xl mx-auto grid-cols-4 bg-card/50">
             <TabsTrigger value="dashboard" className="flex items-center gap-2">
               <Icon name="LayoutDashboard" size={18} />
-              <span>Мониторинг</span>
+              <span className="hidden sm:inline">Воздух</span>
+            </TabsTrigger>
+            <TabsTrigger value="problems" className="flex items-center gap-2">
+              <Icon name="AlertTriangle" size={18} />
+              <span className="hidden sm:inline">Проблемы</span>
             </TabsTrigger>
             <TabsTrigger value="analytics" className="flex items-center gap-2">
               <Icon name="BarChart3" size={18} />
-              <span>Аналитика</span>
+              <span className="hidden sm:inline">Аналитика</span>
             </TabsTrigger>
             <TabsTrigger value="docs" className="flex items-center gap-2">
               <Icon name="FileText" size={18} />
-              <span>Документация</span>
+              <span className="hidden sm:inline">Документы</span>
             </TabsTrigger>
           </TabsList>
 
@@ -229,7 +415,7 @@ export default function Index() {
                 <div className="flex items-center justify-between mb-6">
                   <h2 className="text-xl font-semibold flex items-center gap-2">
                     <Icon name="Map" size={24} className="text-primary" />
-                    Карта датчиков
+                    Карта датчиков качества воздуха
                   </h2>
                   <Badge variant="outline" className="text-sm">
                     {mockSensors.length} активных датчиков
@@ -239,8 +425,8 @@ export default function Index() {
                 <div className="relative h-[400px] bg-muted/20 rounded-lg border border-border/50 overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5"></div>
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="grid grid-cols-2 gap-8 p-8">
-                      {mockSensors.map((sensor) => (
+                    <div className="grid grid-cols-2 gap-6 p-6">
+                      {mockSensors.slice(0, 4).map((sensor) => (
                         <button
                           key={sensor.id}
                           onClick={() => setSelectedSensor(sensor)}
@@ -256,10 +442,10 @@ export default function Index() {
                               sensor.status === 'moderate' ? 'bg-yellow-400' :
                               sensor.status === 'poor' ? 'bg-orange-400' : 'bg-red-400'
                             }`}></div>
-                            <span className="font-semibold">{sensor.name}</span>
+                            <span className="font-semibold text-sm">{sensor.name}</span>
                           </div>
-                          <p className="text-sm text-muted-foreground">{sensor.location}</p>
-                          <Badge className={`${getStatusColor(sensor.status)} mt-2 text-xs`}>
+                          <p className="text-xs text-muted-foreground mb-2">{sensor.location}</p>
+                          <Badge className={`${getStatusColor(sensor.status)} text-xs`}>
                             {getStatusLabel(sensor.status)}
                           </Badge>
                         </button>
@@ -383,12 +569,148 @@ export default function Index() {
             </div>
           </TabsContent>
 
+          <TabsContent value="problems" className="space-y-6 animate-fade-in">
+            <div className="grid md:grid-cols-4 gap-4">
+              <Card className="p-4 bg-card/50 backdrop-blur-sm border-border/50">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-blue-500/20">
+                    <Icon name="AlertTriangle" size={24} className="text-blue-400" />
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold">{problemStats.total}</p>
+                    <p className="text-sm text-muted-foreground">Всего проблем</p>
+                  </div>
+                </div>
+              </Card>
+
+              <Card className="p-4 bg-card/50 backdrop-blur-sm border-border/50">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-yellow-500/20">
+                    <Icon name="Clock" size={24} className="text-yellow-400" />
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold">{problemStats.new}</p>
+                    <p className="text-sm text-muted-foreground">Новых</p>
+                  </div>
+                </div>
+              </Card>
+
+              <Card className="p-4 bg-card/50 backdrop-blur-sm border-border/50">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-orange-500/20">
+                    <Icon name="Settings" size={24} className="text-orange-400" />
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold">{problemStats.inProgress}</p>
+                    <p className="text-sm text-muted-foreground">В работе</p>
+                  </div>
+                </div>
+              </Card>
+
+              <Card className="p-4 bg-card/50 backdrop-blur-sm border-border/50">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-red-500/20">
+                    <Icon name="AlertCircle" size={24} className="text-red-400" />
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold">{problemStats.critical}</p>
+                    <p className="text-sm text-muted-foreground">Критичных</p>
+                  </div>
+                </div>
+              </Card>
+            </div>
+
+            <Card className="p-6 bg-card/50 backdrop-blur-sm border-border/50">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-semibold flex items-center gap-2">
+                  <Icon name="ListFilter" size={24} className="text-primary" />
+                  Экологические проблемы поселения
+                </h2>
+                <div className="flex gap-2">
+                  <Button
+                    variant={problemFilter === 'all' ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => setProblemFilter('all')}
+                  >
+                    Все
+                  </Button>
+                  <Button
+                    variant={problemFilter === 'trash' ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => setProblemFilter('trash')}
+                  >
+                    <Icon name="Trash2" size={16} className="mr-1" />
+                    Мусор
+                  </Button>
+                  <Button
+                    variant={problemFilter === 'road' ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => setProblemFilter('road')}
+                  >
+                    <Icon name="Construction" size={16} className="mr-1" />
+                    Дороги
+                  </Button>
+                  <Button
+                    variant={problemFilter === 'park' ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => setProblemFilter('park')}
+                  >
+                    <Icon name="Trees" size={16} className="mr-1" />
+                    Парки
+                  </Button>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                {filteredProblems.map((problem) => (
+                  <Card key={problem.id} className="p-4 bg-muted/20 border-border/50 hover:border-primary/50 transition-all hover-scale">
+                    <div className="flex items-start gap-4">
+                      <div className={`p-3 rounded-lg ${getSeverityColor(problem.severity)}`}>
+                        <Icon name={getProblemTypeIcon(problem.type)} size={24} />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-start justify-between mb-2">
+                          <div>
+                            <h3 className="font-semibold text-lg">{problem.title}</h3>
+                            <p className="text-sm text-muted-foreground flex items-center gap-1 mt-1">
+                              <Icon name="MapPin" size={14} />
+                              {problem.location}
+                            </p>
+                          </div>
+                          <div className="flex flex-col gap-2">
+                            <Badge className={getSeverityColor(problem.severity)}>
+                              {getSeverityLabel(problem.severity)}
+                            </Badge>
+                            <Badge variant="outline">
+                              {getProblemStatusLabel(problem.status)}
+                            </Badge>
+                          </div>
+                        </div>
+                        <p className="text-sm text-muted-foreground mb-3">{problem.description}</p>
+                        <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                          <span className="flex items-center gap-1">
+                            <Icon name="Calendar" size={12} />
+                            {new Date(problem.reportedDate).toLocaleDateString('ru-RU')}
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <Icon name="User" size={12} />
+                            {problem.reportedBy}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            </Card>
+          </TabsContent>
+
           <TabsContent value="analytics" className="space-y-6 animate-fade-in">
             <div className="grid lg:grid-cols-2 gap-6">
               <Card className="p-6 bg-card/50 backdrop-blur-sm border-border/50">
                 <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
                   <Icon name="TrendingUp" size={20} className="text-primary" />
-                  Динамика PM2.5
+                  Динамика PM2.5 (последние 12 часов)
                 </h3>
                 <div className="h-64 flex items-end gap-2 px-4">
                   {[15, 22, 18, 28, 35, 42, 38, 45, 40, 35, 30, 25].map((value, index) => (
@@ -401,26 +723,28 @@ export default function Index() {
                     </div>
                   ))}
                 </div>
-                <p className="text-center text-sm text-muted-foreground mt-4">Последние 12 часов</p>
+                <p className="text-center text-sm text-muted-foreground mt-4">Часы</p>
               </Card>
 
               <Card className="p-6 bg-card/50 backdrop-blur-sm border-border/50">
                 <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
                   <Icon name="PieChart" size={20} className="text-secondary" />
-                  Распределение качества воздуха
+                  Распределение проблем по типам
                 </h3>
                 <div className="flex items-center justify-center h-64">
                   <div className="space-y-4 w-full">
                     {[
-                      { label: 'Отлично', value: 45, color: 'bg-emerald-500' },
-                      { label: 'Умеренно', value: 30, color: 'bg-yellow-500' },
-                      { label: 'Плохо', value: 20, color: 'bg-orange-500' },
-                      { label: 'Опасно', value: 5, color: 'bg-red-500' }
+                      { label: 'Мусор и отходы', value: 25, color: 'bg-red-500', count: 2 },
+                      { label: 'Дороги', value: 25, color: 'bg-orange-500', count: 2 },
+                      { label: 'Снег/Лед', value: 12.5, color: 'bg-blue-500', count: 1 },
+                      { label: 'Парки/Скверы', value: 12.5, color: 'bg-emerald-500', count: 1 },
+                      { label: 'Водоснабжение', value: 12.5, color: 'bg-cyan-500', count: 1 },
+                      { label: 'Шум', value: 12.5, color: 'bg-purple-500', count: 1 }
                     ].map((item) => (
                       <div key={item.label} className="space-y-2">
                         <div className="flex items-center justify-between text-sm">
                           <span>{item.label}</span>
-                          <span className="font-semibold">{item.value}%</span>
+                          <span className="font-semibold">{item.count} ({item.value}%)</span>
                         </div>
                         <div className="h-3 bg-muted/20 rounded-full overflow-hidden">
                           <div
@@ -437,9 +761,9 @@ export default function Index() {
               <Card className="lg:col-span-2 p-6 bg-card/50 backdrop-blur-sm border-border/50">
                 <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
                   <Icon name="AlertTriangle" size={20} className="text-yellow-400" />
-                  Сводка по всем датчикам
+                  Сводка по датчикам качества воздуха
                 </h3>
-                <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
                   {mockSensors.map((sensor) => (
                     <div
                       key={sensor.id}
@@ -475,44 +799,124 @@ export default function Index() {
             <Card className="p-8 bg-card/50 backdrop-blur-sm border-border/50 max-w-4xl mx-auto">
               <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
                 <Icon name="BookOpen" size={28} className="text-primary" />
-                Техническая документация
+                Техническая документация системы
               </h2>
               
               <div className="space-y-8">
                 <section>
                   <h3 className="text-xl font-semibold mb-3 flex items-center gap-2">
                     <Icon name="Info" size={20} className="text-secondary" />
-                    О системе
+                    О системе экомониторинга
                   </h3>
                   <p className="text-muted-foreground leading-relaxed">
                     Система экологического мониторинга в поселении Селятино обеспечивает контроль качества воздуха 
                     в режиме реального времени. Сеть из 5 датчиков, расположенных в ключевых точках поселения, 
                     отслеживает 9 параметров воздуха и предоставляет данные для принятия управленческих решений 
-                    администрацией поселения.
+                    администрацией поселения. Дополнительно реализован модуль учета и контроля экологических проблем 
+                    городской среды.
                   </p>
                 </section>
 
                 <section>
                   <h3 className="text-xl font-semibold mb-3 flex items-center gap-2">
+                    <Icon name="Layers" size={20} className="text-secondary" />
+                    Модули системы
+                  </h3>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="p-4 rounded-lg bg-muted/20 border border-border/50">
+                      <h4 className="font-semibold text-primary mb-2 flex items-center gap-2">
+                        <Icon name="Wind" size={18} />
+                        Мониторинг воздуха
+                      </h4>
+                      <p className="text-sm text-muted-foreground">
+                        Непрерывный контроль качества воздуха с отслеживанием PM2.5, PM10, CO2, CO, NO2, O3, 
+                        температуры, влажности и давления
+                      </p>
+                    </div>
+                    <div className="p-4 rounded-lg bg-muted/20 border border-border/50">
+                      <h4 className="font-semibold text-primary mb-2 flex items-center gap-2">
+                        <Icon name="AlertTriangle" size={18} />
+                        Учет экопроблем
+                      </h4>
+                      <p className="text-sm text-muted-foreground">
+                        Регистрация и отслеживание проблем: переполненные мусорки, разбитые дороги, 
+                        неубранный снег, загрязнения парков и другие нарушения
+                      </p>
+                    </div>
+                    <div className="p-4 rounded-lg bg-muted/20 border border-border/50">
+                      <h4 className="font-semibold text-primary mb-2 flex items-center gap-2">
+                        <Icon name="BarChart3" size={18} />
+                        Аналитика
+                      </h4>
+                      <p className="text-sm text-muted-foreground">
+                        Визуализация данных, построение трендов, статистика по проблемам 
+                        для принятия обоснованных решений
+                      </p>
+                    </div>
+                    <div className="p-4 rounded-lg bg-muted/20 border border-border/50">
+                      <h4 className="font-semibold text-primary mb-2 flex items-center gap-2">
+                        <Icon name="Bell" size={18} />
+                        Уведомления
+                      </h4>
+                      <p className="text-sm text-muted-foreground">
+                        Автоматические оповещения при превышении нормативов качества воздуха 
+                        и критических экологических проблемах
+                      </p>
+                    </div>
+                  </div>
+                </section>
+
+                <section>
+                  <h3 className="text-xl font-semibold mb-3 flex items-center gap-2">
                     <Icon name="Cpu" size={20} className="text-secondary" />
-                    Отслеживаемые параметры
+                    Отслеживаемые параметры воздуха
                   </h3>
                   <div className="grid md:grid-cols-2 gap-4">
                     {[
-                      { name: 'PM2.5', desc: 'Твердые частицы размером 2.5 мкм', unit: 'мкг/м³' },
-                      { name: 'PM10', desc: 'Твердые частицы размером 10 мкм', unit: 'мкг/м³' },
-                      { name: 'CO₂', desc: 'Углекислый газ', unit: 'ppm' },
-                      { name: 'CO', desc: 'Угарный газ', unit: 'ppm' },
-                      { name: 'NO₂', desc: 'Диоксид азота', unit: 'ppb' },
-                      { name: 'O₃', desc: 'Озон', unit: 'ppb' },
-                      { name: 'Температура', desc: 'Температура окружающей среды', unit: '°C' },
-                      { name: 'Влажность', desc: 'Относительная влажность воздуха', unit: '%' },
-                      { name: 'Давление', desc: 'Атмосферное давление', unit: 'гПа' }
+                      { name: 'PM2.5', desc: 'Твердые частицы размером 2.5 мкм', unit: 'мкг/м³', norm: '≤12' },
+                      { name: 'PM10', desc: 'Твердые частицы размером 10 мкм', unit: 'мкг/м³', norm: '≤54' },
+                      { name: 'CO₂', desc: 'Углекислый газ', unit: 'ppm', norm: '≤600' },
+                      { name: 'CO', desc: 'Угарный газ', unit: 'ppm', norm: '≤1' },
+                      { name: 'NO₂', desc: 'Диоксид азота', unit: 'ppb', norm: '≤53' },
+                      { name: 'O₃', desc: 'Озон', unit: 'ppb', norm: '≤54' },
+                      { name: 'Температура', desc: 'Температура окружающей среды', unit: '°C', norm: '-' },
+                      { name: 'Влажность', desc: 'Относительная влажность воздуха', unit: '%', norm: '40-60' },
+                      { name: 'Давление', desc: 'Атмосферное давление', unit: 'гПа', norm: '1013±20' }
                     ].map((param) => (
                       <div key={param.name} className="p-4 rounded-lg bg-muted/20 border border-border/50">
                         <h4 className="font-semibold text-primary mb-1">{param.name}</h4>
                         <p className="text-sm text-muted-foreground mb-2">{param.desc}</p>
-                        <Badge variant="outline" className="text-xs">{param.unit}</Badge>
+                        <div className="flex items-center justify-between">
+                          <Badge variant="outline" className="text-xs">{param.unit}</Badge>
+                          <span className="text-xs text-muted-foreground">Норма: {param.norm}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+
+                <section>
+                  <h3 className="text-xl font-semibold mb-3 flex items-center gap-2">
+                    <Icon name="ListChecks" size={20} className="text-secondary" />
+                    Типы экологических проблем
+                  </h3>
+                  <div className="space-y-3">
+                    {[
+                      { icon: 'Trash2', type: 'Отходы и мусор', desc: 'Переполненные контейнеры, несанкционированные свалки' },
+                      { icon: 'Construction', type: 'Дороги и тротуары', desc: 'Выбоины, разрушенное покрытие, поврежденные бордюры' },
+                      { icon: 'Snowflake', type: 'Уборка снега', desc: 'Неубранный снег, наледь на тротуарах и дорогах' },
+                      { icon: 'Trees', type: 'Парки и зеленые зоны', desc: 'Загрязнение парков, повреждение газонов' },
+                      { icon: 'Droplet', type: 'Водоснабжение', desc: 'Утечки воды, аварии на водопроводе' },
+                      { icon: 'Volume2', type: 'Шумовое загрязнение', desc: 'Превышение допустимых уровней шума' }
+                    ].map((item) => (
+                      <div key={item.type} className="flex items-start gap-4 p-3 rounded-lg bg-muted/20">
+                        <div className="p-2 rounded-lg bg-primary/20">
+                          <Icon name={item.icon} size={20} className="text-primary" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="font-semibold">{item.type}</p>
+                          <p className="text-sm text-muted-foreground">{item.desc}</p>
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -546,7 +950,7 @@ export default function Index() {
                 <section>
                   <h3 className="text-xl font-semibold mb-3 flex items-center gap-2">
                     <Icon name="Wrench" size={20} className="text-secondary" />
-                    Модуль разработки
+                    Технологический стек
                   </h3>
                   <div className="p-4 rounded-lg bg-muted/20 border border-border/50 space-y-3">
                     <p className="text-muted-foreground">
@@ -563,7 +967,7 @@ export default function Index() {
                       </li>
                       <li className="flex items-start gap-2">
                         <Icon name="Check" size={16} className="text-primary mt-0.5" />
-                        <span><strong>База данных:</strong> PostgreSQL для хранения исторических данных</span>
+                        <span><strong>База данных:</strong> PostgreSQL для хранения исторических данных и реестра проблем</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <Icon name="Check" size={16} className="text-primary mt-0.5" />
@@ -586,7 +990,7 @@ export default function Index() {
               <span>© 2024 Администрация городского поселения Селятино. Экомониторинг</span>
             </div>
             <div className="flex items-center gap-4">
-              <Badge variant="outline" className="text-xs">v1.0.0</Badge>
+              <Badge variant="outline" className="text-xs">v2.0.0</Badge>
               <Badge variant="outline" className="text-xs flex items-center gap-1">
                 <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
                 Все системы работают
