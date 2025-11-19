@@ -30,78 +30,97 @@ const mockSensors: Sensor[] = [
   {
     id: '1',
     name: 'Датчик №1',
-    location: 'Центральный район',
-    lat: 55.7558,
-    lng: 37.6173,
+    location: 'ул. Центральная, Селятино',
+    lat: 55.5208,
+    lng: 37.2978,
     data: {
-      pm25: 12.5,
-      pm10: 18.3,
-      co2: 420,
-      co: 0.4,
-      no2: 25,
-      o3: 48,
-      temperature: 22.5,
-      humidity: 65,
-      pressure: 1013
+      pm25: 11.2,
+      pm10: 16.8,
+      co2: 410,
+      co: 0.3,
+      no2: 22,
+      o3: 45,
+      temperature: 21.3,
+      humidity: 68,
+      pressure: 1015
     },
     status: 'good'
   },
   {
     id: '2',
     name: 'Датчик №2',
-    location: 'Промышленная зона',
-    lat: 55.7458,
-    lng: 37.6273,
+    location: 'Киевское шоссе, Селятино',
+    lat: 55.5178,
+    lng: 37.3008,
     data: {
-      pm25: 35.2,
-      pm10: 52.1,
-      co2: 580,
-      co: 1.2,
-      no2: 65,
-      o3: 82,
-      temperature: 24.1,
-      humidity: 58,
-      pressure: 1011
+      pm25: 28.5,
+      pm10: 42.3,
+      co2: 520,
+      co: 0.9,
+      no2: 58,
+      o3: 72,
+      temperature: 22.8,
+      humidity: 62,
+      pressure: 1013
     },
     status: 'moderate'
   },
   {
     id: '3',
     name: 'Датчик №3',
-    location: 'Жилой массив',
-    lat: 55.7658,
-    lng: 37.6073,
+    location: 'Школа №1, Селятино',
+    lat: 55.5238,
+    lng: 37.2948,
     data: {
-      pm25: 8.7,
-      pm10: 14.2,
-      co2: 410,
-      co: 0.3,
-      no2: 18,
-      o3: 42,
-      temperature: 21.8,
-      humidity: 68,
-      pressure: 1014
+      pm25: 9.5,
+      pm10: 13.7,
+      co2: 405,
+      co: 0.2,
+      no2: 19,
+      o3: 41,
+      temperature: 20.9,
+      humidity: 71,
+      pressure: 1016
     },
     status: 'good'
   },
   {
     id: '4',
     name: 'Датчик №4',
-    location: 'Транспортный узел',
-    lat: 55.7358,
-    lng: 37.6373,
+    location: 'Парк культуры, Селятино',
+    lat: 55.5198,
+    lng: 37.2918,
     data: {
-      pm25: 75.5,
-      pm10: 105.8,
-      co2: 850,
-      co: 2.8,
-      no2: 125,
-      o3: 145,
-      temperature: 25.5,
-      humidity: 52,
-      pressure: 1009
+      pm25: 7.8,
+      pm10: 11.2,
+      co2: 395,
+      co: 0.2,
+      no2: 15,
+      o3: 38,
+      temperature: 20.5,
+      humidity: 73,
+      pressure: 1017
     },
-    status: 'poor'
+    status: 'good'
+  },
+  {
+    id: '5',
+    name: 'Датчик №5',
+    location: 'Администрация, Селятино',
+    lat: 55.5218,
+    lng: 37.2968,
+    data: {
+      pm25: 10.3,
+      pm10: 15.1,
+      co2: 415,
+      co: 0.3,
+      no2: 20,
+      o3: 43,
+      temperature: 21.7,
+      humidity: 67,
+      pressure: 1014
+    },
+    status: 'good'
   }
 ];
 
@@ -174,8 +193,8 @@ export default function Index() {
                 <Icon name="Wind" size={28} className="text-primary" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold">AirMonitor</h1>
-                <p className="text-sm text-muted-foreground">Мониторинг качества воздуха</p>
+                <h1 className="text-2xl font-bold">Экомониторинг Селятино</h1>
+                <p className="text-sm text-muted-foreground">Система контроля качества воздуха</p>
               </div>
             </div>
             <div className="flex items-center gap-4">
@@ -466,9 +485,10 @@ export default function Index() {
                     О системе
                   </h3>
                   <p className="text-muted-foreground leading-relaxed">
-                    AirMonitor - это современная платформа для мониторинга качества воздуха в реальном времени. 
-                    Система использует сеть распределенных датчиков для отслеживания ключевых параметров воздуха 
-                    и предоставляет детальную аналитику для принятия обоснованных решений.
+                    Система экологического мониторинга в поселении Селятино обеспечивает контроль качества воздуха 
+                    в режиме реального времени. Сеть из 5 датчиков, расположенных в ключевых точках поселения, 
+                    отслеживает 9 параметров воздуха и предоставляет данные для принятия управленческих решений 
+                    администрацией поселения.
                   </p>
                 </section>
 
@@ -563,7 +583,7 @@ export default function Index() {
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2 text-muted-foreground">
               <Icon name="Wind" size={20} className="text-primary" />
-              <span>© 2024 AirMonitor. Мониторинг качества воздуха</span>
+              <span>© 2024 Администрация городского поселения Селятино. Экомониторинг</span>
             </div>
             <div className="flex items-center gap-4">
               <Badge variant="outline" className="text-xs">v1.0.0</Badge>
